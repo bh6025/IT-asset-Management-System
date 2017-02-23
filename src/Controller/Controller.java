@@ -121,7 +121,7 @@ public class Controller extends HttpServlet {
 			assetDao = new AssetDao();
 			HttpSession session = request.getSession();
 			String id = (String) session.getAttribute("id");
-			assetDao.registerAssetDao(request.getParameter("category"), request.getParameter("assetName"),
+			assetDao.registerAssetDao(request.getParameter("category"), request.getParameter(request.getParameter("category")),
 					request.getParameter("productName"), request.getParameter("regiState"),
 					request.getParameter("location"), id);
 

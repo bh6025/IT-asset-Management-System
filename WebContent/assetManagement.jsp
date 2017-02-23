@@ -105,9 +105,9 @@
 
                     <select class="form-control" name="SW" id="SW" style="display: none;max-width:15%;">
                     	<option value ="NULL">----</option>
-                        <option value ="Windows server">OS</option>
-                        <option value ="Unix server">DBMS</option>                        
-                        <option value ="Linux server">MiddleWare</option>
+                        <option value ="OS">OS</option>
+                        <option value ="DBMS">DBMS</option>                        
+                        <option value ="MiddleWare">MiddleWare</option>
                         <option value ="Development Tool">Development Tool</option>                       
                         <option value ="etc">etc</option> 
                     </select>
