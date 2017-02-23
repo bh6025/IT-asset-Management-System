@@ -43,7 +43,7 @@
       	<p class="text-right"><%= "사용자 ID : " + id + "   사용자 등급 : " + gradeName%></p>
        	<button class="btn btn-md btn-primary btn-block" onclick="window.location.href='userManagement.do';">회원관리</button>
        	<button class="btn btn-md btn-success btn-block" onclick="window.location.href='assetManagement.do';">자산관리</button>
-       	<button class="btn btn-md btn-warning btn-block" onclick="window.location.href='registerAsset.jsp';">자산등록</button>
+       	<button class="btn btn-md btn-warning btn-block" onclick="window.location.href='assetRegister.jsp';">자산등록</button>
     </div> 
   </body>
 </html>

@@ -125,7 +125,7 @@ public class Controller extends HttpServlet {
 					request.getParameter("productName"), request.getParameter("regiState"),
 					request.getParameter("location"), id);
 
-			viewPage = "registerAsset.jsp";
+			viewPage = "assetRegister.jsp";
 		}
 		// 사용자 등급 올리기
 		else if (com.equals("/userGradeUp.do")) {
@@ -156,8 +156,8 @@ public class Controller extends HttpServlet {
 			logDao = new LogDao();
 			HttpSession session = request.getSession();
 			String id = (String) session.getAttribute("id");
-			logDao.insertLogDao(request.getParameter("code"), request.getParameter("modiState"),
-					id, request.getParameter("modiLocation"));
+			logDao.insertLogDao(request.getParameter("code"), request.getParameter("modiState"), id,
+					request.getParameter("modiLocation"));
 			viewPage = "assetManagement.do";
 		}
 		// 자산 완전 삭제
@@ -167,6 +167,17 @@ public class Controller extends HttpServlet {
 			assetDao.deleteAssetDao(request.getParameter("code"));
 			logDao.deleteLogDao(request.getParameter("code"));
 			viewPage = "assetManagement.do";
+		}
+		// 자산 검색
+		else if (com.equals("/assetSearch.do")) {
+			assetDao = new AssetDao();
+			request.setAttribute("assets",
+					assetDao.searchAssetDao(request.getParameter("category"),
+							request.getParameter(request.getParameter("category")), request.getParameter("productName"),
+							request.getParameter("regiUser"), request.getParameter("regiState"),
+							request.getParameter("location")));
+
+			viewPage = "assetManagement.jsp";
 		} else {
 		}
 

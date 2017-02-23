@@ -73,10 +73,10 @@
                 <label for="inputMajor" class="col-lg-2 control-label">자산 상태</label>
                 <div class="col-lg-10">
                     <select class="form-control" name="regiState" id="regiState">
-                        <option>inProgress</option>
-                        <option>developing</option> 
-                        <option>not used</option> 
-                        <option>trash</option>                                                                     
+                        <option>introduction</option>
+                        <option>in use</option> 
+                        <option>idle</option> 
+                        <option>discard</option>                                                                     
                     </select>
                 </div>
             </div>

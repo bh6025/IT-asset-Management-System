@@ -3,7 +3,6 @@ package Dao;
 import Dto.AssetDto;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -33,93 +32,85 @@ public class AssetDao {
 		stmt = con.createStatement();
 		rs = stmt.executeQuery(sql);
 
-		//db에서 자산을 arraylist에 저장하여 반환
+		// db에서 자산을 arraylist에 저장하여 반환
 		while (rs.next()) {
 			SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date to = transFormat.parse(rs.getString(3));
-			
-			temp = new AssetDto(rs.getString(1), rs.getString(2), to, rs.getString(4), rs.getString(5),
-					rs.getString(6), rs.getString(7), rs.getString(8));
+
+			temp = new AssetDto(rs.getString(1), rs.getString(2), to, rs.getString(4), rs.getString(5), rs.getString(6),
+					rs.getString(7), rs.getString(8));
 			assets.add(temp);
 		}
 
 		dbConnect.close(con, stmt, pstmt, rs);
 		return assets;
 	}
-	
+
 	// 등록하려는 자산 등록
-	public void registerAssetDao(String category, String assetName, String productName, String regiState, String location, String userID) throws Exception{
+	public void registerAssetDao(String category, String assetName, String productName, String regiState,
+			String location, String userID) throws Exception {
 		dbConnect = new DBConnect();
 		con = dbConnect.connect();
-		
+
 		Date today = new Date();
 		String sequence = getSequence();
-		
-		SimpleDateFormat formatter1 = new SimpleDateFormat ( "yyyyMMdd");
-		String today1 = formatter1.format ( today );
-		
-		SimpleDateFormat formatter2 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
-		String today2 = formatter2.format ( today );
-		
+
+		SimpleDateFormat formatter1 = new SimpleDateFormat("yyyyMMdd");
+		String today1 = formatter1.format(today);
+
+		SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String today2 = formatter2.format(today);
+
 		// 자산 테이블에 등록
-		String sql = "insert into asset values ('"
-				+category+ today1 + sequence + "','"
-				+category + "','"
-				+ today2 + "','"
-				+assetName + "','"
-				+productName + "','"
-				+userID + "','"
-				+regiState + "','"
-				+location + "');";
-		
+		String sql = "insert into asset values ('" + category + today1 + sequence + "','" + category + "','" + today2
+				+ "','" + assetName + "','" + productName + "','" + userID + "','" + regiState + "','" + location
+				+ "');";
+
 		stmt = con.createStatement();
 		stmt.executeUpdate(sql);
-		
+
 		// 자산 등록시 로그 테이블에도 저장
-		sql = "insert into log values ('"
-				+category+ today1 + sequence + "','"
-				+ today2 + "','"
-				+regiState + "','"
-				+userID + "','"
-				+location + "');";
-		
+		sql = "insert into log values ('" + category + today1 + sequence + "','" + today2 + "','" + regiState + "','"
+				+ userID + "','" + location + "');";
+
 		stmt.executeUpdate(sql);
-		
+
 		dbConnect.close(con, stmt, pstmt, rs);
 	}
-	
+
 	// 같은 날짜에 등록된 자산이 몇 개 있는지 알아봄. sequence를 구하기 위하여
-	public String getSequence() throws Exception{
+	public String getSequence() throws Exception {
 		dbConnect = new DBConnect();
 		con = dbConnect.connect();
 		int count;
-		
+
 		Date today = new Date();
-		
-		SimpleDateFormat formatter1 = new SimpleDateFormat ( "yyyy-MM-dd");
-		String today1 = formatter1.format ( today );
-		
-		String sql = "SELECT COUNT(*) FROM asset WHERE regiDatetime BETWEEN '"+today1+" 00:00:00' AND '"+today1+" 23:59:59';";
+
+		SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+		String today1 = formatter1.format(today);
+
+		String sql = "SELECT COUNT(*) FROM asset WHERE regiDatetime BETWEEN '" + today1 + " 00:00:00' AND '" + today1
+				+ " 23:59:59';";
 
 		System.out.println(sql);
-		
+
 		stmt = con.createStatement();
 		rs = stmt.executeQuery(sql);
-		
+
 		rs.next();
 		count = rs.getInt("COUNT(*)");
-		
-		if(count < 10){
+
+		if (count < 10) {
 			return "00000" + Integer.toString(count);
-		}else if(count < 100){
+		} else if (count < 100) {
 			return "0000" + Integer.toString(count);
-		}else if(count < 1000){
+		} else if (count < 1000) {
 			return "000" + Integer.toString(count);
-		}else if(count < 10000){
+		} else if (count < 10000) {
 			return "00" + Integer.toString(count);
-		}else if(count < 100000){
+		} else if (count < 100000) {
 			return "0" + Integer.toString(count);
-		}else{
+		} else {
 			return Integer.toString(count);
 		}
 	}
@@ -129,10 +120,88 @@ public class AssetDao {
 		con = dbConnect.connect();
 
 		String sql = "delete from asset where code ='" + code + "';";
-		
+
 		stmt = con.createStatement();
 		stmt.executeUpdate(sql);
-		
+
 		dbConnect.close(con, stmt, pstmt, rs);
+	}
+
+	// 자산 검색
+	public ArrayList<AssetDto> searchAssetDao(String category, String assetName, String productName, String regiUser,
+			String regiState, String location) throws Exception {
+
+		dbConnect = new DBConnect();
+		con = dbConnect.connect();
+		boolean comma = false;
+
+		ArrayList<AssetDto> assets = new ArrayList<AssetDto>();
+		AssetDto temp;
+
+		String sql = "select * from asset where ";
+
+		if(category.compareTo("NULL") != 0){
+			sql += "category = '" + category + "'";
+			comma = true;
+		}
+		
+		if(assetName.compareTo("NULL") != 0){
+			sql += "and assetName = '" + assetName + "'";
+		}
+		
+		if(productName.length() != 0 && comma == true){
+			sql += "and productName = '" + productName + "'";			
+		}else if(productName.length() != 0 && comma == false){
+			sql += "productName = '" + productName + "'";
+			comma = true;
+		}
+		
+		if(regiUser.length() != 0 && comma == true){
+			sql += "and regiUser = '" + regiUser + "'";			
+		}else if(regiUser.length() != 0 && comma == false){
+			sql += "regiUser = '" + regiUser + "'";
+			comma = true;
+		}
+		
+		if(regiState.length() != 0 && comma == true){
+			sql += "and regiState = '" + regiState + "'";			
+		}else if(regiState.length() != 0 && comma == false){
+			sql += "regiState = '" + regiState + "'";
+			comma = true;
+		}
+		
+		if(location.length() != 0 && comma == true){
+			sql += "and location = '" + location + "'";			
+		}else if(location.length() != 0 && comma == false){
+			sql += "location = '" + location + "'";
+			comma = true;
+		}
+
+		sql += ";";
+		
+		if(comma == false){
+			sql = "select * from asset";
+		}
+		
+		System.out.println(sql);
+		
+		stmt = con.createStatement();
+		rs = stmt.executeQuery(sql);
+
+
+
+		//db에서 자산을 arraylist에 저장하여 반환
+		while (rs.next()) {
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date to = transFormat.parse(rs.getString(3));
+
+		temp = new AssetDto(rs.getString(1), rs.getString(2), to,
+		rs.getString(4), rs.getString(5),
+		rs.getString(6), rs.getString(7), rs.getString(8));
+		assets.add(temp);
+		}
+
+		dbConnect.close(con, stmt, pstmt, rs);
+		return assets;
 	}
 }

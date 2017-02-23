@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>register Asset</title>
+    <title>Modify Asset</title>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
@@ -19,6 +19,8 @@
       	String grade = (String) session.getAttribute("grade");
       	String gradeName;
       	String code = request.getParameter("code");
+      	String location = request.getParameter("location");
+      	String regiState = request.getParameter("regiState");
       %>	
       <h2 class="form-signin-heading">롯데 IT 자산 관리 시스템</h2>
       <%
@@ -53,19 +55,48 @@
             
             <div class="form-group" id="modiState">
                 <label for="inputMajor" class="col-lg-2 control-label">자산 상태</label>
+                <% if(regiState.compareTo("inProgress")==0){ %>
                 <div class="col-lg-10">
                     <select class="form-control" name="modiState" id="modiState">
-                        <option>inProgress</option>
-                        <option>developing</option> 
-                        <option>not used</option> 
-                        <option>trash</option>                                                                     
+                        <option selected="selected">introduction</option>
+                        <option>in use</option> 
+                        <option>idle</option> 
+                        <option>discard</option>                                                                       
                     </select>
                 </div>
+                <%} else if(regiState.compareTo("developing")==0){ %>
+                <div class="col-lg-10">
+                    <select class="form-control" name="modiState" id="modiState">
+                        <option>introduction</option>
+                        <option selected="selected">in use</option> 
+                        <option>idle</option> 
+                        <option>discard</option>                                                                      
+                    </select>
+                </div>
+                <%} else if(regiState.compareTo("not used")==0){ %>
+                <div class="col-lg-10">
+                    <select class="form-control" name="modiState" id="modiState">
+                        <option>introduction</option>
+                        <option>in use</option> 
+                        <option selected="selected">idle</option> 
+                        <option>discard</option>                                                                   
+                    </select>
+                </div>
+                <%} else if(regiState.compareTo("trash")==0){ %>
+                <div class="col-lg-10">
+                    <select class="form-control" name="modiState" id="modiState">
+                        <option>introduction</option>
+                        <option>in use</option> 
+                        <option>idle</option> 
+                        <option selected="selected">discard</option>                                                                     
+                    </select>
+                </div>
+                <%} %>
             </div>
             <div class="form-group" id="modiLocation">
                 <label for="inputName" class="col-lg-2 control-label">위치</label>
                 <div class="col-lg-10">
-                    <input type="text" name="modiLocation" id="modiLocation" class=form-control>
+                    <input type="text" name="modiLocation" id="modiLocation" value="<%=location%>" class=form-control>
                 </div>
             </div>
        	  <button class="btn btn-md btn-primary btn-block" type="submit">자산 수정하기</button>
