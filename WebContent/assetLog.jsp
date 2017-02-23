@@ -49,6 +49,7 @@
 	  	    <th>수정시간</th>
 	  	    <th>수정상태</th>
 	  	    <th>수정자</th>
+	  	    <th>장소</th>
 	  	  </tr>
 	  	</thead>
 	  	<tbody>
@@ -59,6 +60,7 @@
 	  	  	  <td>${logs.modiDatetime}</td>
 	  	  	  <td>${logs.modiState}</td>
 	  	  	  <td>${logs.modiUser}</td>
+	  	  	  <td>${logs.modiLocation}</td>
 	  	    </tr>
 	  	  </c:forEach>
 	  	</tbody>

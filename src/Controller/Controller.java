@@ -119,44 +119,47 @@ public class Controller extends HttpServlet {
 		// 자산 등록
 		else if (com.equals("/registerAsset.do")) {
 			assetDao = new AssetDao();
-  			HttpSession session = request.getSession();
-  			String id = (String) session.getAttribute("id");
+			HttpSession session = request.getSession();
+			String id = (String) session.getAttribute("id");
 			assetDao.registerAssetDao(request.getParameter("category"), request.getParameter("assetName"),
 					request.getParameter("productName"), request.getParameter("regiState"),
 					request.getParameter("location"), id);
-			
+
 			viewPage = "registerAsset.jsp";
-		} 
+		}
 		// 사용자 등급 올리기
 		else if (com.equals("/userGradeUp.do")) {
 			userDao = new UserDao();
 			userDao.gradeUpDao(request.getParameter("userID"));
 			viewPage = "userManagement.do";
-		} 
+		}
 		// 사용자 등급 내리기
 		else if (com.equals("/userGradeDown.do")) {
 			userDao = new UserDao();
 			userDao.gradeDownDao(request.getParameter("userID"));
 			viewPage = "userManagement.do";
-		} 
+		}
 		// 사용자 지우기
 		else if (com.equals("/userDelete.do")) {
 			userDao = new UserDao();
 			userDao.deleteUserDao(request.getParameter("userID"));
 			viewPage = "userManagement.do";
-		} 
+		}
 		// 자산 로그 보기
 		else if (com.equals("/assetLog.do")) {
 			logDao = new LogDao();
 			request.setAttribute("logs", logDao.assetLogDao(request.getParameter("code")));
 			viewPage = "assetLog.jsp";
-		} 
+		}
 		// 자산 수정 (로그에 기록이 쌓임)
 		else if (com.equals("/assetModify.do")) {
 			logDao = new LogDao();
-			logDao.insertLogDao(request.getParameter("code"));
+			HttpSession session = request.getSession();
+			String id = (String) session.getAttribute("id");
+			logDao.insertLogDao(request.getParameter("code"), request.getParameter("modiState"),
+					id, request.getParameter("modiLocation"));
 			viewPage = "assetManagement.do";
-		} 
+		}
 		// 자산 완전 삭제
 		else if (com.equals("/assetDelete.do")) {
 			assetDao = new AssetDao();
@@ -164,8 +167,7 @@ public class Controller extends HttpServlet {
 			assetDao.deleteAssetDao(request.getParameter("code"));
 			logDao.deleteLogDao(request.getParameter("code"));
 			viewPage = "assetManagement.do";
-		} 
-		else {
+		} else {
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);

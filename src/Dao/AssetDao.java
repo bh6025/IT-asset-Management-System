@@ -80,7 +80,8 @@ public class AssetDao {
 				+category+ today1 + sequence + "','"
 				+ today2 + "','"
 				+regiState + "','"
-				+userID + "');";
+				+userID + "','"
+				+location + "');";
 		
 		stmt.executeUpdate(sql);
 		
@@ -123,7 +124,15 @@ public class AssetDao {
 		}
 	}
 
-	public void deleteAssetDao(String code) {
+	public void deleteAssetDao(String code) throws Exception {
+		dbConnect = new DBConnect();
+		con = dbConnect.connect();
+
+		String sql = "delete from asset where code ='" + code + "';";
 		
+		stmt = con.createStatement();
+		stmt.executeUpdate(sql);
+		
+		dbConnect.close(con, stmt, pstmt, rs);
 	}
 }

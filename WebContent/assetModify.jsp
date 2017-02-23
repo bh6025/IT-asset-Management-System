@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>LOGIN</title>
+    <title>register Asset</title>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
@@ -12,13 +11,14 @@
     
   </head>
 
-  <body background = "loginLotte.jpg">
-    <div class="container">
+  <body background = "loginLotte.jpg" >
+      <div class="container">
       <%
       	session = request.getSession();
       	String id = (String) session.getAttribute("id");
       	String grade = (String) session.getAttribute("grade");
       	String gradeName;
+      	String code = request.getParameter("code");
       %>	
       <h2 class="form-signin-heading">롯데 IT 자산 관리 시스템</h2>
       <%
@@ -41,42 +41,35 @@
       <% } %>
 
       	<p class="text-right"><%= "사용자 ID : " + id + "   사용자 등급 : " + gradeName%></p>
-	  <table class="table table-striped">
-	  	<thead>
-	  	  <tr>
-	  	    <th>#</th>
-	  	    <th>자산코드</th>
-	  	    <th>자산유형</th>
-	  	    <th>도입일자</th>
-	  	    <th>자산명</th>
-	  	    <th>제품명</th>
-	  	    <th>등록자</th>
-	  	    <th>자산상태</th>
-	  	    <th>위치</th>
-	  	    <th>수정</th>
-	  	  </tr>
-	  	</thead>
-	  	<tbody>
-	  	  <c:forEach items="${assets}" var="assets" varStatus = "status">
-	  	  	<tr>
-	  	  	  <td>${status.count}</td>
-	  	  	  <td>${assets.code}</td>
-	  	  	  <td>${assets.category}</td>
-	  	  	  <td>${assets.regiDatetime}</td>
-	  	  	  <td>${assets.assetName}</td>
-	  	  	  <td>${assets.productName}</td>
-	  	  	  <td>${assets.regiUser}</td>
-	  	  	  <td>${assets.regiState}</td>
-	  	  	  <td>${assets.location}</td>
-	  	  	  <td>
-	  	      <button class="btn-info" onclick="location.href='assetLog.do?code=${assets.code}'">로그</button>
-	  	      <button class="btn-warning" onclick="location.href='assetModify.jsp?code=${assets.code}'">수정</button>
-	  	      <button class="btn-danger" onclick="location.href='assetDelete.do?code=${assets.code}'">완전삭제</button>
-	  	      </td>
-	  	    </tr>
-	  	  </c:forEach>
-	  	</tbody>
-	  </table>
-    </div> 
+      	  
+      	  <form class="form-signin" action="assetModify.do" method="post">
+            <div class="form-group" id="assetName">
+                <label for="inputName" class="col-lg-2 control-label">자산명</label>
+                <div class="col-lg-10">
+                    <label class="col-lg-2 control-label"> <%= code %></label>
+                    <input type="hidden" name ="code" value="<%=code%>">
+                </div>
+            </div>
+            
+            <div class="form-group" id="modiState">
+                <label for="inputMajor" class="col-lg-2 control-label">자산 상태</label>
+                <div class="col-lg-10">
+                    <select class="form-control" name="modiState" id="modiState">
+                        <option>inProgress</option>
+                        <option>developing</option> 
+                        <option>not used</option> 
+                        <option>trash</option>                                                                     
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id="modiLocation">
+                <label for="inputName" class="col-lg-2 control-label">위치</label>
+                <div class="col-lg-10">
+                    <input type="text" name="modiLocation" id="modiLocation" class=form-control>
+                </div>
+            </div>
+       	  <button class="btn btn-md btn-primary btn-block" type="submit">자산 수정하기</button>
+        </form>
+      </div>
   </body>
 </html>
